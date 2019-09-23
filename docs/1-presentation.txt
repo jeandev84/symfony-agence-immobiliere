@@ -1,0 +1,64 @@
+# Presentation de Symfony :
+
+1) Project simple utiliser:
+> composer create-project symfony/skeleton nom-de-mon-project
+
+2) Project complexe utiliser:
+> composer create-project symfony/website-skeleton nom-de-mon-project
+
+
+> composer create-project symfony/website-skeleton MaSuperAgence
+
+# Structure des dossiers :
+ - bin : (phpunit, console)
+   comprends les fichiers executable en ligne de commandes
+
+ - config :
+   comprends les fichiers de configuration de notre project
+
+   * routes.yaml
+   * services.yaml
+   * bundles.yaml
+   /packages
+      configuration lies aux differents packages
+      chaque configuration est lie a son package
+      ex. twig, routing ...
+   /routes
+
+  - public /
+    * index.php
+    La racine de notre application
+    point d'entree de notre application
+
+  - src/
+    dossier comportant le code php de notre application
+
+  - templates /
+    dossier comportant nos vues et layout
+
+  - tests /
+    dossier comportant les tests unitaires
+
+  - translations
+    dossier comportant les traductions pour le site
+
+   - var (cache, log)
+    dossier qui comprendra les caches et les logs
+
+   - vendor
+    nos dependances
+
+   - .env (configuration)
+
+
+ # Lance le projet:
+
+ > php -S localhost:8000 -t public -d display_errors=1
+
+
+ # Console
+
+ > php bin/console
+
+ # Demarrer le server interne de symfony
+ > php bin/console server:run
