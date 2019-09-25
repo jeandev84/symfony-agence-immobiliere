@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class PropertyController
  * @package App\Controller
  */
-class PropertyController extends AbstractController
+class PropertyController1 extends AbstractController
 {
 
 
