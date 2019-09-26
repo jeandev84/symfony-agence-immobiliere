@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   <div class="container mt-4">
+       <h1>Editer le bien </h1>
+       <!-- generer le formulaire avec le helper 'form_start and form_end'
+            on peut ne pas definir form: form car par defaut twig determinera la bonne variable
+       -->
+       {{ include('admin/property/_form.html.twig', {form: form, button: 'Editer'}) }}
+   </div>
+{% endblock %}

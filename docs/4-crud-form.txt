@@ -1,0 +1,37 @@
+# FORM ( create form )
+
+$ php bin/console make:form
+The name of the form class (e.g. DeliciousPizzaType):
+ > PropertyType
+
+ The name of Entity or fully qualified model class name that the new form will be bound to (empty for none):
+ > Property
+
+ created: src/Form/PropertyType.php
+
+
+  Success!
+
+
+ Next: Add fields to your form and start using it.
+ Find the documentation at https://symfony.com/doc/current/forms.html
+
+=========================================================
+config/packages/twig.yaml
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes: ['bootstrap_4_layout.html.twig']
+
+
+==========================================================
+
+Title:    Titre
+Surface:  Surface
+Price:    Prix
+Rooms:    Pieces
+Bedrooms: Chambres
+Heat:     Chauffage
+Floor:    Etage
+City:     Ville
