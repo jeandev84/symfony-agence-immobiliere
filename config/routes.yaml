@@ -5,3 +5,7 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+# en lancer la route /logout l'utilisateur sera deconnecte
+logout:
+   path: /logout

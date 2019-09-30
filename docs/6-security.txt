@@ -1,0 +1,126 @@
+# Pour se deconnecter
+taper: log.out@nom-de-votre-domain
+
+Ex: log.out@localhost:8000/admin
+
+
+##################
+### PROVIDERS ####
+##################
+
+# Ajout de configuration standard yaml ( /opt/lampp/htdocs/web/config/packages/security.yaml )
+
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers: # permet d'indiquer cmt on va recuperer les utilisateurs et les authentifications
+        # in_memory: { memory: null }
+        in_memory:
+            memory:
+                users:
+                    demo: # exemple utilisateur 'demo'
+                        password: demo
+                        roles: ROLE_ADMIN
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+
+            # activate different ways to authenticate
+            # http_basic: true
+
+            form_login: true
+
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
+
+    #encoders:
+        #Symfony\Component\Security\Core\User\User: plaintext
+
+
+# Creer une entite User
+$ php bin/console make:entity User
+
+$ php bin/console doctrine:migrations:migrate
+
+===========================================================================================
+
+DEBOGGER LES COMPOSANTS AU NIVEAU DU FRAMEWORK :
+
+( php bin/console config:dump-reference nom-du-composant-a-debogger : dans notre cas security)
+$ php bin/console config:dump-reference security
+
+#
+
+form_login:
+                provider:             ~
+                remember_me:          true
+                success_handler:      ~
+                failure_handler:      ~
+                check_path:           /login_check ( on modifie le path du fichier : security.yaml )
+                use_forward:          false
+                require_previous_session: false
+                username_parameter:   _username
+                password_parameter:   _password
+                csrf_parameter:       _csrf_token
+                csrf_token_id:        authenticate
+                post_only:            true
+                always_use_default_target_path: false
+                default_target_path:  /
+                login_path:           /login
+                target_path_parameter: _target_path
+                use_referer:          false
+                failure_path:         null
+                failure_forward:      false
+                failure_path_parameter: _failure_path
+                csrf_token_generator: ~
+
+#
+
+/config/packages/security.yaml
+On change le check_path
+main:
+    anonymous: true
+
+    # activate different ways to authenticate
+    # http_basic: true
+    form_login:
+        check_path: login
+
+
+
+################
+   FIXTURES
+################
+Fixtures est une commande qui permet de creer des fausses donnees
+
+Installation du packages fixtures via composer ( necessaire qu'en develpement )
+  $ composer require orm-fixtures --dev
+
+Access en ligne de commandes
+  $ php bin/console make:fixtures
+
+  Apres avoir fini les operations dans la classe UserFixtures
+  On lance la commande suivante qui va utiliser les fixtures et les charger en base de donnees
+
+  $ php bin/console doctrine:fixtures:load
+  $ php bin/console doctrine:fixtures:load --append
+  ( le drapeau --apend permet de ne pas supprimer , mais de rajouter les donnees sans toute fois les vider avant )
+
+   Careful, database "symfony_agence" will be purged. Do you want to continue? (yes/no) [no]:
+   >No (cette etape permet d'effacer ou vider les donnees tout ce qu'on a fait depuis le debut)
+
+
+###############################################
+
+###############################################
+

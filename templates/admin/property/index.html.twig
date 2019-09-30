@@ -29,7 +29,7 @@
                                     <a href="{{ path('admin.property.edit', {id: property.id}) }}" class="btn btn-secondary">Editer</a>
                                     <form method="POST" action="{{ path('admin.property.delete', {id: property.id}) }}" style="display: inline-block" onsubmit="return confirm('etes vous vraiment sur ?')">
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <!-- ~ permet de concatener en Twig ex: delete ~ id = delete1, delete2 ... -->
+                                        <!-- Tilde '~' permet de concatener en Twig ex: delete ~ id = delete1, delete2 ... -->
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ property.id) }}">
                                         <button class="btn btn-danger">Supprimer</button>
                                     </form>
