@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Property;
 use App\Repository\PropertyRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -45,15 +47,83 @@ class PropertyController extends AbstractController
 
     /**
      * @Route("/biens", name="property.index")
+     * @param PaginatorInterface $paginator [ On peut injecter de la sorte et travailler avec ]
+     * @param Request $request
      * @return Response
      */
-     public function index(): Response
+     public function index(PaginatorInterface $paginator, Request $request): Response
      {
+         # Creer une entite qui va representer notre recherche
+
+         # Creer un formulaire
+
+         # Gerer le traitement dans le controller
+
+         # Mise en place d'une pagination
+         $properties = $paginator->paginate(
+             $this->repository->findAllVisibleQuery(), // retourne la requette
+             $request->query->getInt('page', 1),
+             12 // limit
+         );
+
          # Affiche la vue et on passes les differents parametres
          return $this->render('property/index.html.twig', [
-             'current_menu' => 'properties'
+             'current_menu' => 'properties',
+             'properties' => $properties
          ]);
      }
+
+
+     /*
+      public function index(Request $request): Response
+      {
+         # Get all properties
+         # $properties = $this->repository->findAllVisible();
+         # getInt('page', 1) : 1 est la page par defaut, methode getInt() convertit la valeur du parametre en entier
+
+         # https://github.com/KnpLabs/KnpPaginatorBundle
+         $paginator = $paginator  = $this->get('knp_paginator');
+         $properties = $paginator->paginate(
+             $this->repository->findAllVisible(), // retourne la requette
+             $request->query()->getInt('page', 1),
+             12 // limit
+         );
+
+         # Affiche la vue et on passes les differents parametres
+         return $this->render('property/index.html.twig', [
+             'current_menu' => 'properties',
+             'properties' => $properties
+         ]);
+     }
+    */
+
+
+     /*
+     * @Route("/biens", name="property.index")
+     * @param PaginatorInterface $paginator [ On peut injecter de la sorte et travailler avec ]
+     * @param Request $request
+     * @return Response
+     public function index(PaginatorInterface $paginator, Request $request): Response
+     {
+        # Get all properties
+        # $properties = $this->repository->findAllVisible();
+        # getInt('page', 1) : 1 est la page par defaut, methode getInt() convertit la valeur du parametre en entier
+
+        # https://github.com/KnpLabs/KnpPaginatorBundle
+        # if(!is_null($paginator)) { $paginator  = $this->get('knp_paginator'); }
+        $properties = $paginator->paginate(
+            $this->repository->findAllVisible(), // retourne la requette
+            $request->query()->getInt('page', 1),
+            12 // limit
+        );
+
+        # Affiche la vue et on passes les differents parametres
+        return $this->render('property/index.html.twig', [
+            'current_menu' => 'properties',
+            'properties' => $properties
+        ]);
+      }
+      */
 
 
     /**
@@ -63,7 +133,6 @@ class PropertyController extends AbstractController
      * @return Response
      * NB (requirements permettent d'indiquer a quoi doit ressembler les differents parametres
      */
-
     public function show(Property $property, string $slug): Response
     {
         // Important pour le referenceent

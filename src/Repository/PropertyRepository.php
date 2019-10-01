@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Property;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -25,13 +26,12 @@ class PropertyRepository extends ServiceEntityRepository
     /**
      * Retourne les enregistrements qui ne sont pas vendus.
      * Recuperer tous les biens qui ne sont pas vendus, cad ou solde = false
-     * @return Property[] ( retourne un tableau de Property ]
+     * @return Query
      */
-    public function findAllVisible(): array
+    public function findAllVisibleQuery(): Query
     {
         return $this->findVisibleQuery()
-                    ->getQuery()
-                    ->getResult();
+                    ->getQuery();
     }
 
 

@@ -38,6 +38,7 @@ security:
     encoders:
         # Symfony\Component\Security\Core\User\User: plaintext
         # App\Entity\User: plaintext
+        # cost: 12 # cost > ou <
         App\Entity\User:
             algorithm: bcrypt
-            cost: 12 # cost > ou <
+            cost: 12

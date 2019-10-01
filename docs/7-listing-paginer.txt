@@ -1,0 +1,54 @@
+#################################################
+ CREATION DE FIXTURES POUR LES PROPRIETES
+#################################################
+
+$ php bin/console make:fixture
+
+ The class name of the fixtures to create (e.g. AppFixtures):
+ > PropertyFixture
+
+ created: src/DataFixtures/PropertyFixture.php
+
+
+  Success!
+
+
+ Next: Open your new fixtures class and start customizing it.
+ Load your fixtures by running: php bin/console doctrine:fixtures:load
+ Docs: https://symfony.com/doc/master/bundles/DoctrineFixturesBundle/index.html
+
+######################################################
+  INSTALLATION DE FAKER POUR CHARGER DU CONTENU
+######################################################
+
+$ composer require fzaninotto/faker
+
+# LOGIC FIXTURE
+/opt/lampp/htdocs/web/src/DataFixtures/PropertyFixture.php
+
+/web/docs/OLD/Fixtures
+
+$ php bin/console doctrine:fixtures:load
+
+
+#######################################################
+  PAGINATION
+#######################################################
+
+$ composer require knplabs/knp-paginator-bundle
+
+Debug Dependency Injection autowiring
+$ php bin/console debug:autowiring
+
+https://github.com/KnpLabs/KnpPaginatorBundle
+
+
+######################################################
+ VIDER LE CACHE
+######################################################
+
+$ php bin/console cache:clear
+
+system de cache des premiers elements
+
+

@@ -51,9 +51,10 @@ class UserFixtures extends Fixture
         $manager->flush();
     }
 
+
+
     /*
-     * Default Etape
-     *
+     Default Etape
      public function load(ObjectManager $manager)
      {
         // $product = new Product();

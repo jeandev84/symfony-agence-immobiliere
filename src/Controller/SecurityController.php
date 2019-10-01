@@ -24,10 +24,10 @@ class SecurityController extends AbstractController
      */
        public function login(AuthenticationUtils $authenticationUtils)
        {
-            # Recuperer les erreurs d'authentification
+            # Recuperer les erreurs d'authentification ( AuthenticationUtils )
             $error = $authenticationUtils->getLastAuthenticationError();
 
-            # Recureper le dernier nom d'utilisateur qui a ete saisi par l'utilisateur
+            # Recuperer le dernier nom d'utilisateur qui a ete saisi par l'utilisateur
             $lastUsername = $authenticationUtils->getLastUsername();
 
             return $this->render('security/login.html.twig', [
