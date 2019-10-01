@@ -75,6 +75,7 @@ class Property
      */
     private $city;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      */

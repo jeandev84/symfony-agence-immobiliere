@@ -40,5 +40,6 @@ security:
         # App\Entity\User: plaintext
         # cost: 12 # cost > ou <
         App\Entity\User:
-            algorithm: bcrypt
+            # algorithm: bcrypt
+            algorithm: auto
             cost: 12

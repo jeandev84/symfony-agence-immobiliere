@@ -3,6 +3,7 @@ namespace App\Repository;
 
 
 use App\Entity\Property;
+use App\Entity\PropertySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
@@ -26,12 +27,30 @@ class PropertyRepository extends ServiceEntityRepository
     /**
      * Retourne les enregistrements qui ne sont pas vendus.
      * Recuperer tous les biens qui ne sont pas vendus, cad ou solde = false
+     * @param $search
      * @return Query
+     * method where() enchainee ecrase s'ecrase les unes apres les autres
+     * pour eviter cela il faut utiliser andWhere()
      */
-    public function findAllVisibleQuery(): Query
+    public function findAllVisibleQuery(PropertySearch $search): Query
     {
-        return $this->findVisibleQuery()
-                    ->getQuery();
+        $query = $this->findVisibleQuery();
+
+        # traitement avec prix max
+        if($maxprice = $search->getMaxPrice())
+        {
+            $query = $query->andWhere('p.price <= :maxprice')
+                           ->setParameter('maxprice', $maxprice);
+        }
+
+        # traitement avec min surface
+        if($minsurface = $search->getMinSurface())
+        {
+            $query = $query->andWhere('p.surface >= :minsurface')
+                           ->setParameter('minsurface', $minsurface);
+        }
+
+        return $query->getQuery();
     }
 
 

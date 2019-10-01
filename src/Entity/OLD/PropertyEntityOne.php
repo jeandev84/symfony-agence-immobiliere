@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
  * @UniqueEntity("title")  # entite unique par rapport au "title"
  */
-class Property
+class PropertyOne
 {
 
     // On definit HEAT comme constante si les valeurs resteront inchangee
