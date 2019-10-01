@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,11 +16,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Property
 {
 
-    // On definit HEAT comme constante si les valeurs resteront inchangee
-    // Sinon il sera mieux de les conserver en base de donnees.
+    /* On definit HEAT comme constante si les valeurs resteront inchangee
+       Sinon il sera mieux de les conserver en base de donnees.
+    */
     const HEAT = [
-       0 => 'Electrique',
-       1 => 'Gaz'
+        0 => 'Electrique',
+        1 => 'Gaz'
     ];
 
     /**
@@ -98,12 +101,18 @@ class Property
      */
     private $created_at;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Option", inversedBy="properties")
+     */
+    private $options;
+
 
     public function __construct()
     {
-         $this->created_at = new \DateTime();
-         # mettre a false afin qu'il n'ait pas une erreur, ou bien initialise
-         # $this->sold = false;
+        $this->created_at = new \DateTime();
+        $this->options = new ArrayCollection();
+        # mettre a false afin qu'il n'ait pas une erreur, ou bien initialise
+        # $this->sold = false;
     }
 
     public function getId(): ?int
@@ -126,7 +135,7 @@ class Property
 
     /**
      * Slugifier le titre
-    */
+     */
     public function getSlug() : string
     {
         return (new Slugify())->slugify($this->title);
@@ -206,7 +215,7 @@ class Property
 
     public function getFormattedPrice(): string
     {
-         return number_format($this->price, 0, '', ' ');
+        return number_format($this->price, 0, '', ' ');
     }
 
 
@@ -218,10 +227,10 @@ class Property
 
     /**
      * Retourne le type de heat
-    */
+     */
     public function getHeatType(): string
     {
-         return self::HEAT[$this->heat];
+        return self::HEAT[$this->heat];
     }
 
     public function setHeat(int $heat): self
@@ -290,4 +299,33 @@ class Property
 
         return $this;
     }
+
+    /**
+     * @return Collection|Option[]
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options[] = $option;
+            $option->addProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): self
+    {
+        if ($this->options->contains($option)) {
+            $this->options->removeElement($option);
+            $option->removeProperty($this);
+        }
+
+        return $this;
+    }
 }
+

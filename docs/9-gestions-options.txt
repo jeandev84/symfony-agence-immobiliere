@@ -1,0 +1,288 @@
+########################################
+        GESTION DES OPTIONS
+########################################
+
+========================================================================================
+(Une option est liee a plusieurs biens)
+
+OneToOne :
+  - Au cas ou un utilisateur peut avoir un profile ,
+  - ainsi qu'un profile peut appartenier qu'a un seul utilisateur.
+
+OneToMany :
+  - Un article a une categorie .
+  - une categorie peut etre utiliser par plusieurs articles .
+
+ManyToOne :
+  - plusieurs articles peuvent avoir la meme categorie+s
+
+ManyToMany :
+  - Ex: system de tags
+  - Des articles qui ont plusieurs tags.
+  - De la meme maniere un tage peut avoir plusieurs articles.
+
+
+==============================
+Dans notre cas chaque "Option" est lie a plusieurs biens "Property",
+de meme chaque bien "Property" est lie a plusieurs "Option"
+donc on parle de relation "ManyToMany"
+
+
+##############################################################
+          CREATION D'ENTITE
+##############################################################
+$ php bin/console make:entity
+
+ Class name of the entity to create or update (e.g. VictoriousJellybean):
+ > Option
+
+ created: src/Entity/Option.php
+ created: src/Repository/OptionRepository.php
+
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
+
+ New property name (press <return> to stop adding fields):
+ > name
+
+ Field type (enter ? to see all types) [string]:
+ >
+
+ Field length [255]:
+ >
+
+ Can this field be null in the database (nullable) (yes/no) [no]:
+ >
+
+ updated: src/Entity/Option.php
+
+ Add another property? Enter the property name (or press <return> to stop adding fields):
+ > properties
+
+ Field type (enter ? to see all types) [string]:
+ > relation
+
+ What class should this entity be related to?:
+ > Property
+
+What type of relationship is this?
+ ------------ ----------------------------------------------------------------------
+  Type         Description
+ ------------ ----------------------------------------------------------------------
+  ManyToOne    Each Option relates to (has) one Property.
+               Each Property can relate to (can have) many Option objects
+
+  OneToMany    Each Option can relate to (can have) many Property objects.
+               Each Property relates to (has) one Option
+
+  ManyToMany   Each Option can relate to (can have) many Property objects.
+               Each Property can also relate to (can also have) many Option objects
+
+  OneToOne     Each Option relates to (has) exactly one Property.
+               Each Property also relates to (has) exactly one Option.
+ ------------ ----------------------------------------------------------------------
+
+ Relation type? [ManyToOne, OneToMany, ManyToMany, OneToOne]:
+ >
+
+
+ [ERROR] Invalid type: use one of: ManyToOne, OneToMany, ManyToMany, OneToOne
+
+
+ Relation type? [ManyToOne, OneToMany, ManyToMany, OneToOne]:
+ > ManyToMany
+
+ Do you want to add a new property to Property so that you can access/update Option objects from it - e.g. $property->getOptions()? (yes/no) [yes]:
+ > yes
+
+ A new property will also be added to the Property class so that you can access the related Option objects from it.
+
+ New field name inside Property [options]:
+ >
+
+ updated: src/Entity/Option.php
+ updated: src/Entity/Property.php
+
+ Add another property? Enter the property name (or press <return> to stop adding fields):
+ >
+
+
+
+  Success!
+
+
+ Next: When you're ready, create a migration with make:migration
+
+=======================================================================================
+
+
+$ php bin/console make:migration
+
+
+ Next: Review the new migration "src/Migrations/Version20191001112000.php"
+ Then: Run the migration with php bin/console doctrine:migrations:migrate
+ See https://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html
+
+
+On verifie notre fichier de migration : Version20191001112000.php
+
+################
+    MIGRATE
+################
+jeandev@jeandev-Lenovo-G580:/opt/lampp/htdocs/web$ php bin/console doctrine:migrations:migrate
+
+
+                    Application Migrations
+
+
+WARNING! You are about to execute a database migration that could result in schema changes and data loss. Are you sure you wish to continue? (y/n)y
+Migrating up to 20191001112000 from 20190927113306
+
+  ++ migrating 20191001112000
+
+     -> CREATE TABLE `option` (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
+     -> CREATE TABLE option_property (option_id INT NOT NULL, property_id INT NOT NULL, INDEX IDX_AB856D7AA7C41D6F (option_id), INDEX IDX_AB856D7A549213EC (property_id), PRIMARY KEY(option_id, property_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
+     -> CREATE TABLE property_one (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, surface INT NOT NULL, rooms INT NOT NULL, bedrooms INT NOT NULL, floor INT NOT NULL, price INT NOT NULL, heat INT NOT NULL, city VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, postal_code VARCHAR(255) NOT NULL, sold TINYINT(1) DEFAULT '0' NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
+     -> ALTER TABLE option_property ADD CONSTRAINT FK_AB856D7AA7C41D6F FOREIGN KEY (option_id) REFERENCES `option` (id) ON DELETE CASCADE
+     -> ALTER TABLE option_property ADD CONSTRAINT FK_AB856D7A549213EC FOREIGN KEY (property_id) REFERENCES property (id) ON DELETE CASCADE
+
+  ++ migrated (took 637.1ms, used 16M memory)
+
+  ------------------------
+
+  ++ finished in 648.7ms
+  ++ used 16M memory
+  ++ 1 migrations executed
+  ++ 5 sql queries
+
+###############################################
+  VOIR LA LISTE DES COMMANDES
+
+$ php bin/console
+
+Generer un controller
+$ php bin/console make:controller
+
+Generer tout le crud [ controller , entity , .. ]
+Dans notre cas on cree un crud pour l'Option
+$ php bin/console make:crud Option
+
+ created: src/Controller/OptionController.php
+ created: src/Form/OptionType.php
+ created: templates/option/_delete_form.html.twig
+ created: templates/option/_form.html.twig
+ created: templates/option/edit.html.twig
+ created: templates/option/index.html.twig
+ created: templates/option/new.html.twig
+ created: templates/option/show.html.twig
+
+
+  Success!
+
+
+ Next: Check your new CRUD by going to /option/
+
+ Cependant on aura acces par le lien : http://localhost:8000/option/
+
+
+ ===========================
+
+ DOCUMENTATION DOCTRINE
+ https://www.doctrine-project.org
+ https://www.doctrine-project.org/projects
+  ORM/Mapping/Association Mapping
+
+
+
+
+
+ ============================
+ deti/appointment
+
+ api/Appointment.php
+  - get
+  - post
+  - patch
+  - put
+  - delete
+
+192.168.10.254/print/index.php
+
+===========================================
+MIGRATION STATUS ( Afficher le status de migration )
+$ php bin/console doctrine:migrations:status
+
+ == Configuration
+
+    >> Name:                                               Application Migrations
+    >> Database Driver:                                    pdo_mysql
+    >> Database Host:                                      127.0.0.1
+    >> Database Name:                                      symfony_agence
+    >> Configuration Source:                               manually configured
+    >> Version Table Name:                                 migration_versions
+    >> Version Column Name:                                version
+    >> Migrations Namespace:                               DoctrineMigrations
+    >> Migrations Directory:                               /opt/lampp/htdocs/web/src/Migrations
+    >> Previous Version:                                   2019-09-27 11:33:06 (20190927113306)
+    >> Current Version:                                    2019-10-01 11:20:00 (20191001112000)
+    >> Next Version:                                       Already at latest version
+    >> Latest Version:                                     2019-10-01 11:20:00 (20191001112000)
+    >> Executed Migrations:                                4
+    >> Executed Unavailable Migrations:                    0
+    >> Available Migrations:                               4
+    >> New Migrations:                                     0
+
+( ICI ON DEMANDE A REVENIR SUR LA VERSION PRECEDENTE DE LA BASE DE DONNEES )
+jeandev@jeandev-Lenovo-G580:/opt/lampp/htdocs/web$ php bin/console doctrine:migrations:migrate 20190927113306
+
+
+                    Application Migrations
+
+
+WARNING! You are about to execute a database migration that could result in schema changes and data loss. Are you sure you wish to continue? (y/n)y
+Migrating down to 20190927113306 from 20191001112000
+
+  -- reverting 20191001112000
+
+     -> ALTER TABLE option_property DROP FOREIGN KEY FK_AB856D7AA7C41D6F
+     -> DROP TABLE `option`
+     -> DROP TABLE option_property
+     -> DROP TABLE property_one
+
+  -- reverted (took 291.5ms, used 16M memory)
+
+  ------------------------
+
+  ++ finished in 296.6ms
+  ++ used 16M memory
+  ++ 1 migrations executed
+  ++ 4 sql queries
+
+jeandev@jeandev-Lenovo-G580:/opt/lampp/htdocs/web$ php bin/console doctrine:migrations:migrate
+
+                    Application Migrations
+
+
+WARNING! You are about to execute a database migration that could result in schema changes and data loss. Are you sure you wish to continue? (y/n)y
+Migrating up to 20191001112000 from 20190927113306
+
+  ++ migrating 20191001112000
+
+     -> CREATE TABLE `option` (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
+     -> CREATE TABLE option_property (option_id INT NOT NULL, property_id INT NOT NULL, INDEX IDX_AB856D7AA7C41D6F (option_id), INDEX IDX_AB856D7A549213EC (property_id), PRIMARY KEY(option_id, property_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
+     -> CREATE TABLE property_one (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, surface INT NOT NULL, rooms INT NOT NULL, bedrooms INT NOT NULL, floor INT NOT NULL, price INT NOT NULL, heat INT NOT NULL, city VARCHAR(255) NOT NULL, address VARCHAR(255) NOT NULL, postal_code VARCHAR(255) NOT NULL, sold TINYINT(1) DEFAULT '0' NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
+     -> ALTER TABLE option_property ADD CONSTRAINT FK_AB856D7AA7C41D6F FOREIGN KEY (option_id) REFERENCES `option` (id) ON DELETE CASCADE
+     -> ALTER TABLE option_property ADD CONSTRAINT FK_AB856D7A549213EC FOREIGN KEY (property_id) REFERENCES property (id) ON DELETE CASCADE
+
+  ++ migrated (took 700.9ms, used 16M memory)
+
+  ------------------------
+
+  ++ finished in 704.4ms
+  ++ used 16M memory
+  ++ 1 migrations executed
+  ++ 5 sql queries
+
+============================================
+jQuery pour gestions des options
+https://cdnjs.com/

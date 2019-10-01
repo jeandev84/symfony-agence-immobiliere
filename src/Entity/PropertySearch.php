@@ -2,6 +2,7 @@
 namespace App\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -26,6 +27,22 @@ class PropertySearch
       * signifit qu'on aura au minimum 10 m2 et au maximum 400 m2
      */
      private $minSurface;
+
+
+    /**
+     * @var ArrayCollection
+     */
+     private $options;
+
+
+    /**
+     * PropertySearch constructor.
+     */
+     public function __construct()
+     {
+         $this->options = new ArrayCollection();
+     }
+
 
     /**
      * @return int|null
@@ -57,6 +74,22 @@ class PropertySearch
     public function setMinSurface(int $minSurface)
     {
         $this->minSurface = $minSurface;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOptions(): ArrayCollection
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param ArrayCollection $options
+     */
+    public function setOptions(ArrayCollection $options)
+    {
+        $this->options = $options;
     }
 
 
